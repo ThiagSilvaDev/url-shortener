@@ -1,11 +1,13 @@
 package com.shortit.urlshortener.service;
 
 import com.google.common.hash.Hashing;
+import com.shortit.urlshortener.dto.LongUrlRequest;
 import com.shortit.urlshortener.entity.Url;
 import com.shortit.urlshortener.repository.UrlRepository;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 @Service
 public class UrlService {
@@ -15,17 +17,26 @@ public class UrlService {
         this.urlRepository = urlRepository;
     }
 
-    public Url generateShortUrl(String longUrl) {
+    public Url generateShortUrl(LongUrlRequest request) {
+        String longUrl = request.longUrl();
+
         if (longUrl == null || longUrl.isEmpty()) {
             throw new IllegalArgumentException("URL cannot be null or empty");
         }
+
+        Optional<Url> existingUrl = urlRepository.findByLongUrl(longUrl);
+
+        if (existingUrl.isPresent()) {
+            return existingUrl.get();
+        }
+
         String hash = Hashing.murmur3_32_fixed().hashString(longUrl, StandardCharsets.UTF_8).toString();
 
-        Url url = new Url();
-        url.setShortUrl(hash);
-        url.setLongUrl(longUrl);
+        Url newUrl = new Url();
+        newUrl.setShortUrl(hash);
+        newUrl.setLongUrl(longUrl);
 
-        return urlRepository.save(url);
+        return urlRepository.save(newUrl);
     }
     public String getLongUrl(String shortUrl) {
         Url url = urlRepository.findByShortUrl(shortUrl).orElse(null);

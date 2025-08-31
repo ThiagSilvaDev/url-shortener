@@ -13,7 +13,7 @@ public class Url {
     @Column(name = "long_url", nullable = false)
     private String longUrl;
 
-    @Column(name = "short_url", nullable = false)
+    @Column(name = "short_url", nullable = false, unique = true)
     private String shortUrl;
 
     public Url() {}
