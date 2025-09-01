@@ -5,6 +5,7 @@ import com.shortit.urlshortener.dto.ShortUrlResponse;
 import com.shortit.urlshortener.entity.Url;
 import com.shortit.urlshortener.service.UrlService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +18,15 @@ import java.net.URI;
 public class UrlController {
     private final UrlService urlService;
 
+    @Value("${app.base-url}")
+    private String baseUrl;
+
     public UrlController(UrlService urlService) {
         this.urlService = urlService;
     }
 
     @PostMapping("/shortener")
-    public ResponseEntity<String> shortenerUrl(@Valid @RequestBody LongUrlRequest request) {
+    public ResponseEntity<ShortUrlResponse> shortenerUrl(@Valid @RequestBody LongUrlRequest request) {
         Url url = urlService.generateShortUrl(request);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -30,9 +34,11 @@ public class UrlController {
                 .buildAndExpand(url.getShortUrl())
                 .toUri();
 
-        ShortUrlResponse response = new ShortUrlResponse(url.getShortUrl());
+        ShortUrlResponse response = new ShortUrlResponse(
+                baseUrl + "/" + url.getShortUrl()
+        );
 
-        return ResponseEntity.created(location).body("http://localhost:8080/" + response.shortUrl());
+        return ResponseEntity.created(location).body(response);
     }
 
     @GetMapping("/{shortUrl}")
