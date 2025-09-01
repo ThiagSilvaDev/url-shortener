@@ -4,6 +4,8 @@ import com.google.common.hash.Hashing;
 import com.shortit.urlshortener.dto.LongUrlRequest;
 import com.shortit.urlshortener.entity.Url;
 import com.shortit.urlshortener.repository.UrlRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -11,6 +13,8 @@ import java.util.Optional;
 
 @Service
 public class UrlService {
+    private static final Logger logger = LoggerFactory.getLogger(UrlService.class);
+
     private final UrlRepository urlRepository;
 
     public UrlService(UrlRepository urlRepository) {
@@ -21,12 +25,14 @@ public class UrlService {
         String longUrl = request.longUrl();
 
         if (longUrl == null || longUrl.isEmpty()) {
+            logger.error("URL is null or empty: {}", longUrl);
             throw new IllegalArgumentException("URL cannot be null or empty");
         }
 
         Optional<Url> existingUrl = urlRepository.findByLongUrl(longUrl);
 
         if (existingUrl.isPresent()) {
+            logger.info("URL already exists: {}", existingUrl.get());
             return existingUrl.get();
         }
 
@@ -39,7 +45,11 @@ public class UrlService {
         return urlRepository.save(newUrl);
     }
     public String getLongUrl(String shortUrl) {
-        Url url = urlRepository.findByShortUrl(shortUrl).orElse(null);
+        Url url = urlRepository.findByShortUrl(shortUrl)
+                .orElseThrow(() -> {
+            logger.warn("Short URL not found: {}", shortUrl);
+            return new IllegalArgumentException("Short URL not found: " + shortUrl);
+        });
         
         return url != null ? url.getLongUrl() : null;
     }
