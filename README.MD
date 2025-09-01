@@ -97,4 +97,3 @@ This will redirect you to the original long URL.
 ## License
 
 [MIT](LICENSE)
-```
