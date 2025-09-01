@@ -8,6 +8,7 @@ public record LongUrlRequest(
         @NotEmpty(message = "URL cannot be empty")
         String longUrl
 ) {
+    // TODO create a mapper for the request
     public LongUrlRequest(String longUrl) {
         this.longUrl = longUrl;
     }

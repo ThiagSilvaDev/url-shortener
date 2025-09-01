@@ -35,6 +35,7 @@ public class UrlController {
 
         Url url = urlService.generateShortUrl(request);
 
+        // TODO change the approach to generate the location
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{shortUrl}")
                 .buildAndExpand(url.getShortUrl())

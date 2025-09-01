@@ -24,6 +24,7 @@ public class UrlService {
     public Url generateShortUrl(LongUrlRequest request) {
         String longUrl = request.longUrl();
 
+        // TODO create a custom exception for this
         if (longUrl == null || longUrl.isEmpty()) {
             logger.error("URL is null or empty: {}", longUrl);
             throw new IllegalArgumentException("URL cannot be null or empty");
@@ -31,11 +32,13 @@ public class UrlService {
 
         Optional<Url> existingUrl = urlRepository.findByLongUrl(longUrl);
 
+        // TODO create a custom exception for this
         if (existingUrl.isPresent()) {
             logger.info("URL already exists: {}", existingUrl.get());
             return existingUrl.get();
         }
 
+        // TODO improve the hashing algorithm to avoid collisions
         String hash = Hashing.murmur3_32_fixed().hashString(longUrl, StandardCharsets.UTF_8).toString();
 
         Url newUrl = new Url();
@@ -45,6 +48,8 @@ public class UrlService {
         return urlRepository.save(newUrl);
     }
     public String getLongUrl(String shortUrl) {
+        // TODO create a custom exception for this
+        // TODO change the approach to handle not found
         Url url = urlRepository.findByShortUrl(shortUrl)
                 .orElseThrow(() -> {
             logger.warn("Short URL not found: {}", shortUrl);
