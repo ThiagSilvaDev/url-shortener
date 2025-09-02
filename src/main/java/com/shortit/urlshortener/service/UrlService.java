@@ -17,8 +17,11 @@ public class UrlService {
 
     private final UrlRepository urlRepository;
 
-    public UrlService(UrlRepository urlRepository) {
+    private final RedisService redisService;
+
+    public UrlService(UrlRepository urlRepository, RedisService redisService) {
         this.urlRepository = urlRepository;
+        this.redisService = redisService;
     }
 
     public Url generateShortUrl(LongUrlRequest request) {
@@ -47,7 +50,15 @@ public class UrlService {
 
         return urlRepository.save(newUrl);
     }
+
     public String getLongUrl(String shortUrl) {
+        String longUrl = redisService.get(shortUrl);
+
+        if (longUrl != null) {
+            logger.info("Cache hit for short URL: {}", shortUrl);
+            return longUrl;
+        }
+
         // TODO create a custom exception for this
         // TODO change the approach to handle not found
         Url url = urlRepository.findByShortUrl(shortUrl)
@@ -55,7 +66,14 @@ public class UrlService {
             logger.warn("Short URL not found: {}", shortUrl);
             return new IllegalArgumentException("Short URL not found: " + shortUrl);
         });
-        
-        return url != null ? url.getLongUrl() : null;
+
+        cacheUrl(shortUrl, url.getLongUrl());
+
+        return url.getLongUrl();
+    }
+
+    public void cacheUrl(String shortUrl, String longUrl) {
+        redisService.set(shortUrl, longUrl);
+        logger.info("Cached URL - Short: {}, Long: {}", shortUrl, longUrl);
     }
 }

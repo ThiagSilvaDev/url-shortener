@@ -10,7 +10,7 @@ public class Url {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "long_url", nullable = false)
+    @Column(name = "long_url", nullable = false, length = 2048)
     private String longUrl;
 
     @Column(name = "short_url", nullable = false, unique = true)
