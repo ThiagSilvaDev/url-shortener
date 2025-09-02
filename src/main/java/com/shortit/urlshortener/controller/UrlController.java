@@ -42,6 +42,7 @@ public class UrlController {
                 .toUri();
 
         ShortUrlResponse response = new ShortUrlResponse(
+                request.longUrl(),
                 baseUrl + "/" + url.getShortUrl()
         );
 
@@ -61,6 +62,6 @@ public class UrlController {
 
         logger.info("Redirecting to long URL: {}", longUrl);
 
-        return ResponseEntity.status(HttpStatus.FOUND).headers(headers).build();
+        return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).headers(headers).build();
     }
 }
