@@ -13,8 +13,8 @@ This is a simple URL shortener service built with Spring Boot. It allows users t
 
 ## Technologies Used
 
-*   Java 17
-*   Spring Boot
+*   Java 21
+*   Spring Boot 3
 *   Maven
 *   H2 Database
 *   SLF4J for logging
@@ -24,7 +24,7 @@ This is a simple URL shortener service built with Spring Boot. It allows users t
 
 ### Prerequisites
 
-*   Java 17 or higher
+*   Java 21 or higher
 *   Maven
 
 ### Installation
@@ -87,10 +87,12 @@ This will redirect you to the original long URL.
 
 ## TODOs
 
+*   Change the DB to postgree or DynamoDB
+*   Implement cache with redis
 *   Create a mapper for the request
 *   Improve the response
 *   Change the approach to generate the location
-*   Create a custom exception for this
+*   Create a custom exception handler
 *   Improve the hashing algorithm to avoid collisions
 *   Change the approach to handle not found
 
