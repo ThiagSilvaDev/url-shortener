@@ -7,7 +7,6 @@ import com.shortit.urlshortener.service.UrlService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +17,10 @@ import java.net.URI;
 
 @RestController
 public class UrlController {
+
     private static final Logger logger = LoggerFactory.getLogger(UrlController.class);
 
     private final UrlService urlService;
-
-    @Value("${app.base-url}")
-    private String baseUrl;
 
     public UrlController(UrlService urlService) {
         this.urlService = urlService;
@@ -31,23 +28,23 @@ public class UrlController {
 
     @PostMapping("/shortener")
     public ResponseEntity<ShortUrlResponse> shortenerUrl(@Valid @RequestBody LongUrlRequest request) {
-        logger.info("Received URL shortening request for: {}", request.longUrl());
+        String longUrl = request.longUrl();
+        logger.info("Received URL shortening request for: {}", longUrl);
 
-        Url url = urlService.generateShortUrl(request);
+        Url url = urlService.generateShortUrl(longUrl);
 
-        // TODO change the approach to generate the location
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
                 .path("/{shortUrl}")
                 .buildAndExpand(url.getShortUrl())
                 .toUri();
 
         ShortUrlResponse response = new ShortUrlResponse(
-                request.longUrl(),
-                baseUrl + "/" + url.getShortUrl()
+                longUrl,
+                location.toString()
         );
 
-        logger.info("Shortened URL: {} to {}", request.longUrl(), response.shortUrl());
-
+        logger.info("Shortened URL: {} to {}", longUrl, location);
         return ResponseEntity.created(location).body(response);
     }
 
