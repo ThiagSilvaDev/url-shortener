@@ -1,5 +1,5 @@
 services:
-  app:
+  backend:
     environment:
       - SPRING_PROFILES_ACTIVE=dev
       - SPRING_DATASOURCE_USERNAME=devuser

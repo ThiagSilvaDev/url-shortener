@@ -26,7 +26,7 @@ public class UrlController {
         this.urlService = urlService;
     }
 
-    @PostMapping("/shortener")
+    @PostMapping("/api/v1/shortener")
     public ResponseEntity<ShortUrlResponse> shortenerUrl(@Valid @RequestBody LongUrlRequest request) {
         String longUrl = request.longUrl();
         logger.info("Received URL shortening request for: {}", longUrl);

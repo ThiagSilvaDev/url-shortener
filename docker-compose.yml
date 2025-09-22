@@ -1,6 +1,6 @@
 services:
-  app:
-    build: .
+  backend:
+    build: ./backend
     ports:
       - "8080:8080"
     environment:
@@ -8,6 +8,10 @@ services:
     depends_on:
       - db
       - redis
+  frontend:
+    build: ./frontend
+    ports:
+      - "4200:4200"
   db:
     image: postgres:latest
   redis:
