@@ -48,7 +48,7 @@ public class UrlService {
         }
 
         Url url = urlRepository.findByShortUrl(shortUrl)
-                .orElseThrow(() -> new UrlNotFoundException("Url not found" + shortUrl));
+                .orElseThrow(() -> new UrlNotFoundException("Url not found " + shortUrl));
 
         cacheUrl(url);
 

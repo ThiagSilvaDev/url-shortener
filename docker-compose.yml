@@ -10,9 +10,5 @@ services:
       - redis
   db:
     image: postgres:latest
-    volumes:
-      - pgdata:/var/lib/postgresql/data
   redis:
     image: redis:latest
-volumes:
-  pgdata:
