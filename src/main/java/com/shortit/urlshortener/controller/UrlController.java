@@ -58,7 +58,6 @@ public class UrlController {
         headers.setLocation(URI.create(longUrl));
 
         logger.info("Redirecting to long URL: {}", longUrl);
-
         return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).headers(headers).build();
     }
 }

@@ -14,15 +14,10 @@ public class Url {
     @Column(name = "long_url", nullable = false, length = 2048)
     private String longUrl;
 
-    @Column(name = "short_url", nullable = false, unique = true)
+    @Column(name = "short_url", unique = true)
     private String shortUrl;
 
     public Url() {
-    }
-
-    public Url(String longUrl, String shortUrl) {
-        this.longUrl = longUrl;
-        this.shortUrl = shortUrl;
     }
 
     public Long getId() {

@@ -1,0 +1,17 @@
+services:
+  app:
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_DATASOURCE_USERNAME=devuser
+      - SPRING_DATASOURCE_PASSWORD=devpass
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/devdb
+  db:
+    environment:
+      POSTGRES_USER: devuser
+      POSTGRES_PASSWORD: devpass
+      POSTGRES_DB: devdb
+    ports:
+      - "5432:5432"
+  redis:
+    ports:
+      - "6379:6379"
