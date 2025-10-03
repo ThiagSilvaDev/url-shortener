@@ -6,10 +6,11 @@ COPY . .
 
 RUN npm run build -- --configuration production
 
-# Stage 2: Serve the application from Nginx
+# Stage 2: Nginx to serve built app
 FROM nginx:alpine
-# Copy the built output from the 'build' stage
-COPY --from=build /app/dist/frontend/browser /usr/share/nginx/html
-# Copy a custom Nginx configuration to handle SPA routing
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy Angular build output (if project folder exists inside dist, adjust accordingly)
+COPY --from=build /app/dist/*/browser /usr/share/nginx/html
+# Copy custom nginx config (adjust path if different)
+COPY nginx.conf /etc/nginx/nginx.conf
 EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

@@ -1,12 +1,10 @@
 services:
-  nginx:
-    image: nginx:latest
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-    depends_on:
-      - app
+  #  nginx:
+  #    image: nginx:latest
+  #    ports:
+  #      - "8080:80"
+  #    depends_on:
+  #      - backend
   backend:
     environment:
       - SPRING_PROFILES_ACTIVE=prod
