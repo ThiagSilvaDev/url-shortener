@@ -11,7 +11,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
@@ -33,11 +32,7 @@ public class UrlController {
 
         Url url = urlService.generateShortUrl(longUrl);
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath()
-                .path("/{shortUrl}")
-                .buildAndExpand(url.getShortUrl())
-                .toUri();
+        URI location = URI.create("http://localhost:8080/" + url.getShortUrl());
 
         ShortUrlResponse response = new ShortUrlResponse(
                 longUrl,

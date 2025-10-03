@@ -2,60 +2,64 @@
 
 ## Overview
 
-This is a simple URL shortener service built with Spring Boot. It allows users to shorten long URLs into shorter, more manageable links.
+This is a simple URL shortener service built with Spring Boot. It allows users to shorten long URLs into shorter, more
+manageable links.
 
 ## Features
 
-*   Shorten long URLs
-*   Redirect to original URLs using short URLs
-*   Uses H2 database for storage
-*   Uses MurmurHash3 for generating short URLs
+* Shorten long URLs
+* Redirect to original URLs using short URLs
+* Uses Postgres for storage
+* Uses base62 hashing for generating short URLs
+* Rate limiting to prevent abuse
+* Caching with Redis for improved performance
 
 ## Technologies Used
 
-*   Java 17
-*   Spring Boot
-*   Maven
-*   H2 Database
-*   SLF4J for logging
-*   Guava library for hashing
+* Java 21
+* Spring Boot
+* Maven
+* PostgreeSQL
+* Redis for caching
+* Flyway for database migrations
+* Nginx as a reverse proxy
+* Docker for containerization
+* SLF4J for logging
 
 ## Getting Started
 
 ### Prerequisites
 
-*   Java 17 or higher
-*   Maven
+* Java 21 or higher
+* Maven
+* Docker and docker compose
 
 ### Installation
 
-1.  Clone the repository:
+1. Clone the repository:
 
-    ```bash
-    git clone https://github.com/ThiagSilvaDev/url-shortener
-    ```
-2.  Navigate to the project directory:
+   ```bash
+   git clone https://github.com/ThiagSilvaDev/url-shortener
+   ```
+2. Navigate to the project directory:
 
-    ```bash
-    cd url-shortener
-    ```
+   ```bash
+   cd url-shortener
+   ```
 
 ### Running the Application
 
-1.  Build the application:
+Run the application:
 
-    ```bash
-    mvn clean install
-    ```
-2.  Run the application:
+   ```bash
+   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+   ```
 
-    ```bash
-    mvn spring-boot:run
-    ```
+The application will be accessible at `http://localhost:4200`.
 
-The application will be accessible at `http://localhost:8080`.
+### Using the Service API
 
-### Using the Service
+The API will be accessible at `http://localhost:8080`.
 
 #### Shorten a URL
 
@@ -73,7 +77,8 @@ Response:
 
 ```json
 {
-  "shortUrl": "http://localhost:8080/a1b2c3d4"
+  "longUrl": "https://www.example.com",
+  "shortUrl": "http://localhost:8080/b"
 }
 ```
 
@@ -81,18 +86,9 @@ Response:
 
 In your browser paste the URL received in the response, for example:
 
-`http://localhost:8080/a1b2c3d4`
+`http://localhost:8080/b`
 
 This will redirect you to the original long URL.
-
-## TODOs
-
-*   Create a mapper for the request
-*   Improve the response
-*   Change the approach to generate the location
-*   Create a custom exception for this
-*   Improve the hashing algorithm to avoid collisions
-*   Change the approach to handle not found
 
 ## License
 

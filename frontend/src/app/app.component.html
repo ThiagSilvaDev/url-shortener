@@ -1,0 +1,17 @@
+<main class="container">
+  <h1>URL Shortener</h1>
+  <form (ngSubmit)="submit()">
+    <label for="longUrl">Long URL</label>
+    <input [(ngModel)]="longUrl" id="longUrl" name="longUrl" placeholder="https://example.com" required type="url"/>
+    <button [disabled]="loading()" type="submit">Shorten</button>
+  </form>
+
+  <p *ngIf="loading()">Processing...</p>
+
+  <section *ngIf="shortUrl()" class="result">
+    <h2>Short URL</h2>
+    <a [href]="shortUrl()!" rel="noopener" target="_blank">{{ shortUrl() }}</a>
+  </section>
+
+  <p *ngIf="error()" class="error">{{ error() }}</p>
+</main>
